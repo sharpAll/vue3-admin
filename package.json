@@ -1,0 +1,33 @@
+{
+  "name": "quant_transaction",
+  "version": "5.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "element-plus": "1.0.2-beta.52",
+    "vue": "^3.1.2",
+    "vue-router": "^4.0.10",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.7",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.1.2",
+    "autoprefixer": "^9",
+    "postcss": "^7",
+    "sass": "^1.38.0",
+    "sass-loader": "^12.1.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "vite": "2.3.7"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
