@@ -59,7 +59,7 @@ export default {
     overflow-y: scroll;
     box-sizing: border-box;
   }
-  .content-collapse {
+  &.content-collapse {
     left: 65px;
   }
 }
