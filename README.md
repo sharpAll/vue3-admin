@@ -15,7 +15,9 @@ npm run dev
 // 执行构建命令，生成的dist文件夹放在服务器下即可访问
 npm run build
 ```
-
+tailwindcss报错请执行如下语句：  
+npm uninstall tailwindcss postcss autoprefixer  
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9  
 ## License
 
 [MIT](https://github.com/lin-xin/vue-manage-system/blob/master/LICENSE)
