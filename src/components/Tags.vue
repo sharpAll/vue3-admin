@@ -10,24 +10,22 @@
         <router-link :to="item.path" class="tags-li-title">{{
           item.title
         }}</router-link>
-        <span class="tags-li-icon" @click="closeTags(index)">
-          <i class="el-icon-close"></i>
-        </span>
+        <n-icon size="14" class="tags-li-icon" @click="closeTags(index)">
+          <CloseOutlined />
+        </n-icon>
       </li>
     </ul>
     <div class="tags-close-box">
-      <el-dropdown @command="handleTags">
-        <el-button size="mini" type="primary">
+      <n-dropdown trigger="hover" :options="options" @select="handleTags">
+        <n-button size="small" icon-placement="right" type="primary">
           标签选项
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu size="small">
-            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-            <el-dropdown-item command="all">关闭所有</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+          <template #icon>
+            <n-icon size="16" color="#fff">
+              <DownOutlined />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-dropdown>
     </div>
   </div>
 </template>
@@ -36,7 +34,9 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { DownOutlined, CloseOutlined } from "@vicons/antd";
 export default {
+  components: { DownOutlined, CloseOutlined },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -47,6 +47,17 @@ export default {
     const store = useStore();
     const tagsList = computed(() => store.state.tagsList);
     const showTags = computed(() => tagsList.value.length > 0);
+
+    const options = [
+      {
+        label: "关闭其他",
+        key: "other",
+      },
+      {
+        label: "关闭所有",
+        key: "all",
+      },
+    ];
 
     // 关闭单个标签
     const closeTags = (index) => {
@@ -109,8 +120,9 @@ export default {
       isActive,
       tagsList,
       showTags,
-      closeTags,
+      options,
       handleTags,
+      closeTags,
     };
   },
 };
@@ -161,6 +173,9 @@ export default {
         text-overflow: ellipsis;
         margin-right: 5px;
         color: #666;
+      }
+      .tags-li-icon{
+        vertical-align: -3px;
       }
       &.active {
         .tags-li-title {

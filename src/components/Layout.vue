@@ -5,10 +5,10 @@
     <div class="content-box" :class="{ 'content-collapse': collapse }">
       <v-tags></v-tags>
       <div class="content">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component, route }">
           <transition name="move" mode="out-in">
             <keep-alive :include="tagsList">
-              <component :is="Component" />
+              <component :is="Component" :key="route.fullPath" />
             </keep-alive>
           </transition>
         </router-view>
@@ -49,8 +49,8 @@ export default {
   top: 70px;
   bottom: 0;
   padding-bottom: 30px;
-  -webkit-transition: left 0.3s ease-in-out;
-  transition: left 0.3s ease-in-out;
+  -webkit-transition: left 0.3s;
+  transition: left 0.3s;
   background: #e1e8e6;
   .content {
     width: auto;

@@ -1,7 +1,6 @@
 # vue3-admin
 
-基于 Vue3 + Element Plus 的后台管理系统解决方案。
-原作地址[vue-manage-system](https://github.com/lin-xin/vue-manage-system)，该项目提供精简版框架，删除不必要组件，加入sass与tailwindcss。
+基于 Vue3 + Naive UI 的精简版后台管理系统框架。
 
 ## 安装步骤
 

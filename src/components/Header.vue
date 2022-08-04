@@ -2,8 +2,12 @@
   <div class="header">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="collapseChage">
-      <i v-if="!collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
+      <n-icon v-if="!collapse" size="26" color="#fff">
+        <MenuFoldOutlined />
+      </n-icon>
+      <n-icon v-else size="26" color="#fff">
+        <MenuUnfoldOutlined />
+      </n-icon>
     </div>
     <div class="logo">量化交易监控</div>
     <div class="header-right">
@@ -16,9 +20,19 @@
         <span class="text-base">
           {{ username }}
         </span>
-        <el-tooltip effect="dark" content="退出" placement="bottom">
-          <i class="ml-5 cursor-pointer el-icon-lx-exit" @click="logOut"></i>
-        </el-tooltip>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <n-icon
+              class="ml-5 cursor-pointer"
+              size="24"
+              color="#fff"
+              @click="logOut"
+            >
+              <LogoutOutlined />
+            </n-icon>
+          </template>
+          退出
+        </n-tooltip>
       </div>
     </div>
   </div>
@@ -27,9 +41,16 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { ElMessageBox } from "element-plus";
+import { useDialog } from "naive-ui";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  LogoutOutlined,
+} from "@vicons/antd";
 export default {
+  components: { MenuFoldOutlined, MenuUnfoldOutlined, LogoutOutlined },
   setup() {
+    const dialog = useDialog();
     const username = localStorage.getItem("ms_username");
 
     const store = useStore();
@@ -48,14 +69,17 @@ export default {
     // 退出登录
     const router = useRouter();
     function logOut() {
-      ElMessageBox.confirm("确定要退出登录吗？", "退出登录", {
-        type: "warning",
-      })
-        .then(() => {
+      dialog.success({
+        title: "温馨提醒",
+        content: "确定要退出登录吗？",
+        positiveText: "确定",
+        negativeText: "取消",
+        showIcon: false,
+        onPositiveClick: () => {
           localStorage.removeItem("ms_username");
           router.push("/login");
-        })
-        .catch(() => {});
+        },
+      });
     }
     return {
       username,
@@ -74,12 +98,11 @@ export default {
   height: 70px;
   font-size: 22px;
   color: #fff;
-  background-color: #0C2135;
+  background-color: #0c2135;
   .collapse-btn {
     float: left;
-    padding: 0 21px;
+    padding: 22px 21px 0;
     cursor: pointer;
-    line-height: 70px;
   }
   .logo {
     float: left;

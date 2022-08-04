@@ -1,123 +1,136 @@
 <template>
   <div class="layout-sidebar">
-    <el-menu
-      class="sidebar-el-menu"
-      :default-active="onRoutes"
-      :collapse="collapse"
-      background-color="#102d48"
-      text-color="#d4dae2"
-      active-text-color="#33939c"
-      unique-opened
-      router
-    >
-      <template v-for="item in items">
-        <template v-if="item.subs">
-          <el-submenu :index="item.index" :key="item.index">
-            <template #title>
-              <i :class="item.icon"></i>
-              <span>{{ item.title }}</span>
-            </template>
-            <template v-for="subItem in item.subs">
-              <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index"
-              >
-                <template #title>{{ subItem.title }}</template>
-                <el-menu-item
-                  v-for="(threeItem, i) in subItem.subs"
-                  :key="i"
-                  :index="threeItem.index"
-                >
-                  {{ threeItem.title }}</el-menu-item
-                >
-              </el-submenu>
-              <el-menu-item v-else :index="subItem.index" :key="subItem.index"
-                >{{ subItem.title }}
-              </el-menu-item>
-            </template>
-          </el-submenu>
-        </template>
-        <template v-else>
-          <el-menu-item :index="item.index" :key="item.index">
-            <i :class="item.icon"></i>
-            <template #title>{{ item.title }}</template>
-          </el-menu-item>
-        </template>
-      </template>
-    </el-menu>
+    <n-layout has-sider>
+      <n-layout-sider
+        collapse-mode="width"
+        :collapsed-width="64"
+        :width="250"
+        :collapsed="collapse"
+      >
+        <n-menu
+          v-model:value="activeKey"
+          :collapsed="collapse"
+          :collapsed-width="64"
+          :collapsed-icon-size="22"
+          :options="items"
+          :on-update:value="selectMenu"
+          :indent="16"
+          :value="curRoute"
+        />
+      </n-layout-sider>
+    </n-layout>
   </div>
 </template>
 
 <script>
-import { computed, watch } from "vue";
+import { computed, h } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import { RouterLink } from "vue-router";
+import { NIcon } from "naive-ui";
+import { HomeOutlined, ProfileOutlined } from "@vicons/antd";
 export default {
+  components: { HomeOutlined, ProfileOutlined },
   setup() {
+    function renderIcon(icon) {
+      return () => h(NIcon, null, { default: () => h(icon) });
+    }
     const items = [
       {
-        icon: "el-icon-lx-home",
-        index: "/dashboard",
-        title: "系统首页",
+        icon: renderIcon(HomeOutlined),
+        key: "/dashboard",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "Dashboard",
+              },
+            },
+            { default: () => "系统首页" }
+          ),
       },
       {
-        icon: "el-icon-lx-calendar",
-        index: "1",
-        title: "策略列表",
-        subs: [
+        icon: renderIcon(ProfileOutlined),
+        key: "1",
+        label: "策略列表",
+        children: [
           {
-            index: "/strategy/detail/1",
-            title: "策略NO1",
+            key: "/strategy/detail/1",
+            label: () =>
+              h(
+                RouterLink,
+                {
+                  to: {
+                    name: "StrategyDetail",
+                    params: {
+                      id: "1",
+                    },
+                  },
+                },
+                { default: () => "策略NO1" }
+              ),
           },
         ],
       },
     ];
 
     const route = useRoute();
-
-    const onRoutes = computed(() => {
-      return route.path;
-    });
+    const curRoute = route.path
 
     const store = useStore();
     const collapse = computed(() => store.state.collapse);
 
     return {
       items,
-      onRoutes,
+      curRoute,
       collapse,
     };
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .layout-sidebar {
   display: block;
   position: absolute;
   left: 0;
   top: 70px;
   bottom: 0;
+  background-image: linear-gradient(to bottom right, #0b365e, #091b2b);
   overflow-y: scroll;
-  .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
-  }
-  .el-menu-item,
-  .el-submenu__title {
-    i {
-      color: #d4dae2;
-      margin-top: -2px;
+  ::v-deep(.n-menu) {
+    background-color: #102d48;
+    .n-menu-item-content {
+      .n-menu-item-content__icon,
+      .n-menu-item-content-header,
+      .n-menu-item-content__arrow {
+        color: #d4dae2 !important;
+        a {
+          color: #d4dae2;
+          &.router-link-active {
+            color: #33939c !important;
+          }
+        }
+      }
+      &.n-menu-item-content--selected {
+        .n-menu-item-content__icon,
+        .n-menu-item-content-header {
+          color: #33939c !important;
+        }
+      }
+      &.n-menu-item-content--child-active {
+        .n-menu-item-content__arrow,
+        .n-menu-item-content-header,
+        .n-menu-item-content__icon {
+          color: #33939c !important;
+        }
+      }
+      &:hover::before,
+      &.n-menu-item-content--hover::before {
+        background-color: transparent;
+      }
     }
-    &.is-active i {
-      color: #33939c;
-    }
-  }
-  & > ul {
-    height: 100%;
-  }
-  &::-webkit-scrollbar {
-    width: 0;
   }
 }
 </style>
